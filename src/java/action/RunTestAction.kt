@@ -70,9 +70,10 @@ class RunTestAction : AnAction() {
             if (port < 0) {
                 throw BaseException("项目端口没开,拿不到项目的端口!")
             }
-            val log: Logger = Logger.getInstance(this.javaClass)
+
             log.info("准备开始请求 $port, 内容为 $positionMethod")
             ApplicationManager.getApplication().invokeLater {
+                val log: Logger = Logger.getInstance("执行线程")
                 Thread {
                     catchBaseException {
                         try {
@@ -101,7 +102,6 @@ class RunTestAction : AnAction() {
                                 throw BaseException("debug时间太长了吧?")
                             } else {
                                 throw BaseException("端口尚未打开, 程序还没启动?")
-
                             }
                         } catch (e: ConnectException) {
                             log.warn(e)

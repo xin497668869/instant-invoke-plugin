@@ -10,9 +10,7 @@ import com.intellij.debugger.impl.GenericDebuggerRunnerSettings;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.ConfigurationPerRunnerSettings;
-import com.intellij.execution.configurations.JavaCommandLine;
 import com.intellij.execution.configurations.JavaParameters;
-import com.intellij.execution.configurations.ParametersList;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.configurations.RunProfileState;
@@ -30,6 +28,7 @@ import util.AdvanceJavaAgentTool;
 public class JRebelDebugRunner extends GenericDebuggerRunner {
     public JRebelDebugRunner() {
     }
+
     @Override
     public SettingsEditor<GenericDebuggerRunnerSettings> getSettingsEditor(Executor var1, RunConfiguration var2) {
         return JRebelDebugRunnerCommon.getSettingsEditor(var1, var2);
@@ -45,17 +44,6 @@ public class JRebelDebugRunner extends GenericDebuggerRunner {
     @Override
     protected RunContentDescriptor doExecute(@NotNull RunProfileState var1, @NotNull ExecutionEnvironment env) throws ExecutionException {
         JRebelDebugRunnerCommon.preDoExecute(var1, env);
-        if (var1 instanceof JavaCommandLine) {
-            ParametersList javaParameters = ((JavaCommandLine) var1).getJavaParameters().getVMParametersList();
-            String hotDeployParam = AdvanceJavaAgentTool.INSTANCE.getHotDeployParam(env.getProject());
-            if (hotDeployParam != null) {
-                javaParameters.addParametersString(hotDeployParam);
-            }
-            String xrebelParam = AdvanceJavaAgentTool.INSTANCE.getXrebelParam(env.getProject());
-            if (xrebelParam != null) {
-                javaParameters.addParametersString(xrebelParam);
-            }
-        }
 
         RunContentDescriptor var3 = super.doExecute(var1, env);
         JRebelDebugRunnerCommon.doExecute(var3, env.getProject(), env);
@@ -81,7 +69,24 @@ public class JRebelDebugRunner extends GenericDebuggerRunner {
     @Override
     public void patch(JavaParameters var1, RunnerSettings var2, RunProfile var3, boolean var4) throws ExecutionException {
         super.patch(var1, var2, var3, var4);
+        if(var4) {
+            patchInstantInvokePlugin(var1, var2, var3);
+        }
         JRebelDebugRunnerCommon.patch(var1, var3);
+
+
+    }
+
+    public void patchInstantInvokePlugin(JavaParameters var1, RunnerSettings var2, RunProfile var3) {
+
+        String hotDeployParam = AdvanceJavaAgentTool.INSTANCE.getInstantInvokeAgent(((RunConfiguration) var3).getProject());
+        if (hotDeployParam != null) {
+            var1.getVMParametersList().addParametersString(hotDeployParam);
+        }
+        String xrebelParam = AdvanceJavaAgentTool.INSTANCE.getXrebelAgent(((RunConfiguration) var3).getProject());
+        if (xrebelParam != null) {
+            var1.getVMParametersList().addParametersString(xrebelParam);
+        }
     }
 
     @Override

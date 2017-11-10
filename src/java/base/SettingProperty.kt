@@ -17,7 +17,7 @@ object SettingProperty {
     private val hotDeploy = "is_hotdeploy"
     private val xrebel = "is_xrebel"
     private val PROJECT_PORT = "project_port"
-    val HOT_DEPLOY_AGENT = "instant-invoke-agent"
+    val INSTANT_INVOKE_AGENT = "instant-invoke-agent"
     val DELIMITER = "@-@-@"
     private val lastRequest = "lastRequest"
     private val isProjectInit = "isProjectInit "

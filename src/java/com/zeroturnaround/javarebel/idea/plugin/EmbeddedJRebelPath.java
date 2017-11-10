@@ -10,6 +10,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import component.InitStartupActivity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import util.AdvanceJavaAgentTool;
 
 import java.io.File;
 
@@ -28,7 +29,7 @@ public class EmbeddedJRebelPath {
             log.debug("Nothing in cache for cachedEmbeddedLegacyPath...");
 
             try {
-                String path = System.getProperty("jrebel.jar.location", getJRebelPluginPath() + File.separator + "lib" + File.separator + "jrebel" + File.separator + "jrebel.jar");
+                String path = System.getProperty("jrebel.jar.location", AdvanceJavaAgentTool.INSTANCE.getJrebelAgent());
                 validatePath(path);
                 cachedEmbeddedLegacyPath = path;
             } catch (Exception var1) {
