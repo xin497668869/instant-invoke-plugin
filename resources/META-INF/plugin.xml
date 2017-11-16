@@ -23,8 +23,6 @@
     <!--<depends optional="true">com.intellij.javaee</depends>-->
     <!--<depends optional="true">WebSphere</depends>-->
     <!--<depends optional="true">Weblogic</depends>-->
-    <depends optional="true">org.jetbrains.idea.maven</depends>
-    <depends optional="true">org.jetbrains.plugins.gradle</depends>
     <!-- added by request from JetBrains devs. Fixes some problem with imports on their side -->
     <depends>com.intellij.modules.java</depends>
 
@@ -49,22 +47,17 @@
 
     </extensions>
 
-    <extensions defaultExtensionNs="org.jetbrains.plugins.gradle">
-        <projectResolve
-                implementation="com.zeroturnaround.javarebel.idea.plugin.runner.gradle.JRebelGradleProjectResolver"/>
-    </extensions>
-
     <actions>
         <action id="action.RunTestAction" class="action.RunTestAction"
-                text="热部署启动" description="热部署启动">
+                text="快速调用启动" description="快速调用启动">
             <keyboard-shortcut keymap="$default" first-keystroke="alt X"/>
         </action>
         <action id="action.ReRunTestAction" class="action.ReRunTestAction"
-                text="热部署重启动" description="热部署重启动">
+                text="快速调用重启动" description="重新调用上一次方法">
             <keyboard-shortcut keymap="$default" first-keystroke="alt C"/>
         </action>
         <action id="action.SettingAction" class="action.SettingAction"
-                text="热部署配置" description="配置参数">
+                text="快速调用配置" description="快速调用配置">
         </action>
         <group popup="true" id="com.xin.instant-invoke" text="快速调用" >
             <reference ref="action.RunTestAction"/>
