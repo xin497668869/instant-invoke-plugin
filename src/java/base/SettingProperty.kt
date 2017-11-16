@@ -14,6 +14,7 @@ import java.io.File
 object SettingProperty {
 
 
+
     private val hotDeploy = "is_hotdeploy"
     private val xrebel = "is_xrebel"
     private val PROJECT_PORT = "project_port"
@@ -22,7 +23,11 @@ object SettingProperty {
     private val lastRequest = "lastRequest"
     private val isProjectInit = "isProjectInit "
 
+    fun test(test:Int?){
+        println("asdfasdf")
+    }
     fun getLastRequest(project: Project): String {
+        test(null)
         return PropertiesComponent.getInstance(project).getValue(lastRequest, "")
     }
 

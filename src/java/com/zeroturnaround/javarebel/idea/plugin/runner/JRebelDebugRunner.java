@@ -10,6 +10,7 @@ import com.intellij.debugger.impl.GenericDebuggerRunnerSettings;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.ConfigurationPerRunnerSettings;
+import com.intellij.execution.configurations.JavaCommandLine;
 import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.execution.configurations.RunProfile;
@@ -18,8 +19,12 @@ import com.intellij.execution.configurations.RunnerSettings;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.ui.RunContentDescriptor;
+import com.intellij.openapi.actionSystem.DataKeys;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
+import com.zeroturnaround.javarebel.idea.plugin.xml.RebelXML;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import util.AdvanceJavaAgentTool;
@@ -43,6 +48,15 @@ public class JRebelDebugRunner extends GenericDebuggerRunner {
 
     @Override
     protected RunContentDescriptor doExecute(@NotNull RunProfileState var1, @NotNull ExecutionEnvironment env) throws ExecutionException {
+        if (env.getDataContext() != null) {
+            Module module = DataKeys.MODULE.getData(env.getDataContext());
+            if (module != null && !RebelXML.getInstance(module).exists()) {
+                RebelXML.getInstance(module).generate(true);
+                Messages.showInfoMessage("项目第一次使用, 会生成rebel.xml, 请重新启动", "提示");
+                return null;
+            }
+        }
+        patchInstantInvokePlugin(((JavaCommandLine) var1).getJavaParameters(), env.getRunProfile());
         JRebelDebugRunnerCommon.preDoExecute(var1, env);
 
         RunContentDescriptor var3 = super.doExecute(var1, env);
@@ -69,15 +83,15 @@ public class JRebelDebugRunner extends GenericDebuggerRunner {
     @Override
     public void patch(JavaParameters var1, RunnerSettings var2, RunProfile var3, boolean var4) throws ExecutionException {
         super.patch(var1, var2, var3, var4);
-        if(var4) {
-            patchInstantInvokePlugin(var1, var2, var3);
+        if (var4) {
+            patchInstantInvokePlugin(var1, var3);
         }
         JRebelDebugRunnerCommon.patch(var1, var3);
 
 
     }
 
-    public void patchInstantInvokePlugin(JavaParameters var1, RunnerSettings var2, RunProfile var3) {
+    public void patchInstantInvokePlugin(JavaParameters var1, RunProfile var3) {
 
         String hotDeployParam = AdvanceJavaAgentTool.INSTANCE.getInstantInvokeAgent(((RunConfiguration) var3).getProject());
         if (hotDeployParam != null) {

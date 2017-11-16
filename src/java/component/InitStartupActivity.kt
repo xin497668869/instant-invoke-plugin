@@ -9,7 +9,6 @@ import com.intellij.psi.search.GlobalSearchScope
 import com.zeroturnaround.javarebel.conf.RebelPropertyResolver
 import com.zeroturnaround.javarebel.idea.plugin.EmbeddedJRebelPath
 import com.zeroturnaround.javarebel.idea.plugin.runner.JRebelDebugRunner
-import org.zeroturnaround.bundled.org.bouncycastle.crypto.signers.RSADigestSigner
 import java.io.File
 import java.io.IOException
 
@@ -33,8 +32,6 @@ class InitStartupActivity : StartupActivity {
                 log.error("rebel.license设置失败", e)
             }
 
-            //提前加载 RSADigestSigner
-            RSADigestSigner::class.java.name
             JRebelDebugRunner::class.java.name
             EmbeddedJRebelPath::class.java.name
         }
