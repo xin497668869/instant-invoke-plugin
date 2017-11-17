@@ -17,8 +17,9 @@ class ReRunTestAction : AnAction() {
         val lastRequest = SettingProperty.getLastRequest(e!!.project!!)
 
         if (StringUtils.isEmpty(lastRequest)) {
-            RunTestAction.requestInvoke(ObjectMapper().readValue(lastRequest, MethodVo::class.java), e.project!!)
             Messages.showInfoMessage("第一次还没有发送", "提示")
+        } else {
+            RunTestAction.requestInvoke(ObjectMapper().readValue(lastRequest, MethodVo::class.java), e.project!!)
         }
     }
 
