@@ -80,7 +80,7 @@ class RunTestAction : AnAction() {
                             val socket = Socket()
                             val socketAddress = InetSocketAddress("localhost", port)
                             socket.connect(socketAddress, 500)
-                            socket.soTimeout = 1 * 60 * 1000
+                            socket.soTimeout = 30 * 60 * 1000
                             socket.use {
                                 val bufferedWriter = BufferedWriter(OutputStreamWriter(it.getOutputStream()))
                                 val requestContext = ObjectMapper().writeValueAsString(positionMethod)
@@ -98,8 +98,14 @@ class RunTestAction : AnAction() {
                             }
                         } catch (e: SocketTimeoutException) {
                             log.warn(e)
+                            if (e.message?.contains("Read timed out") == true) {
+                                throw BaseException("debug时间太长了吧?")
+                            } else {
+                                throw BaseException("端口尚未打开, 程序还没启动?")
+                            }
                         } catch (e: ConnectException) {
                             log.warn(e)
+                            throw BaseException("debug时间太长了吧?")
                         } catch (e: Exception) {
                             log.error(e)
                             throw BaseException("请求异常, 请看日志 ${e.message}")
