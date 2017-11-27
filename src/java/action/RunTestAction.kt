@@ -98,14 +98,8 @@ class RunTestAction : AnAction() {
                             }
                         } catch (e: SocketTimeoutException) {
                             log.warn(e)
-                            if (e.message?.contains("Read timed out") == true) {
-                                throw BaseException("debug时间太长了吧?")
-                            } else {
-                                throw BaseException("端口尚未打开, 程序还没启动?")
-                            }
                         } catch (e: ConnectException) {
                             log.warn(e)
-                            throw BaseException("debug时间太长了吧?")
                         } catch (e: Exception) {
                             log.error(e)
                             throw BaseException("请求异常, 请看日志 ${e.message}")
