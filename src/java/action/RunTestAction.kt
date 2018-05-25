@@ -9,15 +9,12 @@ import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiParameter
 import com.intellij.psi.impl.source.PsiJavaFileImpl
-import com.intellij.util.messages.Topic
 import util.PluginFileHelper
 import util.catchBaseException
 import vo.BaseException
 import vo.MethodVo
 import vo.ResponseData
-import java.io.BufferedReader
 import java.io.BufferedWriter
-import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.ConnectException
 import java.net.InetSocketAddress
@@ -62,7 +59,6 @@ class RunTestAction : AnAction() {
         /**
          * 用于和显示组件进行交互
          */
-        var ResponseDataTopic = Topic.create("ResponseDataTopicListener", ResponseDataTopicListener::class.java)
 
         fun requestInvoke(positionMethod: MethodVo, project: Project) {
 
@@ -76,7 +72,7 @@ class RunTestAction : AnAction() {
                 val log: Logger = Logger.getInstance("执行线程")
                 Thread {
                     catchBaseException {
-                        try {
+                        try {   println("准备请求");
                             val socket = Socket()
                             val socketAddress = InetSocketAddress("localhost", port)
                             socket.connect(socketAddress, 500)
@@ -87,14 +83,6 @@ class RunTestAction : AnAction() {
                                 bufferedWriter.write(requestContext + "\r\n")
                                 SettingProperty.setLastRequest(project, requestContext)
                                 bufferedWriter.flush()
-                                val bufferedReader = BufferedReader(InputStreamReader(it.getInputStream()))
-                                val readLine = bufferedReader.readLine()
-                                log.info("读取请求内容 $readLine")
-                                if (readLine.isNotBlank()) {
-                                    val responseData = ObjectMapper().readValue(readLine, ResponseData::class.java)
-                                    println("收到的协议 $responseData")
-                                    var responseDataListener = project.messageBus.syncPublisher(ResponseDataTopic)
-                                }
                             }
                         } catch (e: SocketTimeoutException) {
                             log.warn(e)

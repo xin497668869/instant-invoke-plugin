@@ -6,6 +6,7 @@ import com.google.common.io.Files
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
+import com.zeroturnaround.xrebel.sdk.UserLicense
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.ObjectOutputStream
@@ -53,7 +54,7 @@ object AdvanceJavaAgentTool {
 
     fun createXrebelLic() {
 
-        val userHome = System.getProperty("user.home")+"\\.xrebel"
+        val userHome = System.getProperty("user.home") + "\\.xrebel"
         if (File(userHome, "xrebel.lic").exists()) {
             return
         }
@@ -80,10 +81,11 @@ object AdvanceJavaAgentTool {
         crackMsg.put("override", "true")
 
         val licenseMap = HashMap<String, Any?>()
-        licenseMap.put("license", objectToBytes(crackMsg))
-        licenseMap.put("signature", "".toByteArray())
+        val userLiscense = UserLicense()
+        userLiscense.license = objectToBytes(crackMsg)
+        userLiscense.signature = "".toByteArray()
         File(userHome).mkdir()
-        Files.write(objectToBytes(licenseMap), File(userHome, "xrebel.lic"))
+        Files.write(objectToBytes(userLiscense), File(userHome, "xrebel.lic"))
     }
 
 

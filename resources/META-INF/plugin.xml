@@ -26,25 +26,27 @@
     <!-- added by request from JetBrains devs. Fixes some problem with imports on their side -->
     <depends>com.intellij.modules.java</depends>
 
+
     <extensions defaultExtensionNs="com.intellij">
-
-        <!--<postStartupActivity implementation="com.xin.StartProject"></postStartupActivity>-->
-        <!--<toolWindow id="code_review" anchor="right" icon="/images/haha.png"-->
-                    <!--factoryClass="com.xin.stack.StackToolWindowFactory"/>-->
-
         <facetType implementation="com.zeroturnaround.javarebel.idea.plugin.facet.JRebelFacetType"/>
         <executor implementation="com.zeroturnaround.javarebel.idea.plugin.runner.JRebelExecutor"/>
         <executor implementation="com.zeroturnaround.javarebel.idea.plugin.runner.JRebelDebugExecutor"/>
         <programRunner implementation="com.zeroturnaround.javarebel.idea.plugin.runner.JRebelRunner"/>
         <programRunner implementation="com.zeroturnaround.javarebel.idea.plugin.runner.JRebelDebugRunner"/>
         <java.programPatcher implementation="com.zeroturnaround.javarebel.idea.plugin.runner.PreRunChecks"/>
-        <!--<applicationConfigurable id="com.zeroturnaround.javarebel.idea.plugin.settings.JRebelSettingsComponent"-->
-        <!--provider="com.zeroturnaround.javarebel.idea.plugin.settings.JRebelSettingsComponent"-->
-        <!--displayName="JRebel" groupId="root" dynamic="true" />-->
-        <errorHandler implementation="com.zeroturnaround.javarebel.idea.plugin.logger.ZtErrorHandler"/>
+        <toolWindow factoryClass="com.zeroturnaround.javarebel.idea.plugin.toolwindow.JRebelWindowFactory"
+                    icon="/icons/zt_13x13.png" id="JRebel" anchor="left" secondary="true"/>
+        <toolWindow factoryClass="com.zeroturnaround.javarebel.idea.plugin.toolwindow.RebelRemoteLogWindowFactory"
+                    icon="/icons/zt_13x13.png" id="JRebel Console" anchor="bottom" secondary="true"/>
+        <applicationConfigurable id="com.zeroturnaround.javarebel.idea.plugin.settings.JRebelSettingsComponent"
+                                 provider="com.zeroturnaround.javarebel.idea.plugin.settings.JRebelSettingsComponent"
+                                 displayName="JRebel" groupId="root" dynamic="true" />
+        <errorHandler implementation="com.zeroturnaround.javarebel.idea.plugin.logger.ZtErrorHandler" />
+
+        <projectService serviceInterface="com.zeroturnaround.javarebel.idea.plugin.settings.state.JRebelWorkspaceConfiguration"
+                        serviceImplementation="com.zeroturnaround.javarebel.idea.plugin.settings.state.JRebelWorkspaceConfiguration"/>
 
         <postStartupActivity implementation="component.InitStartupActivity"></postStartupActivity>
-
     </extensions>
 
     <actions>
@@ -66,7 +68,6 @@
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </group>
     </actions>
-
 
     <module-components>
         <component>
@@ -93,13 +94,19 @@
 
         <component>
             <implementation-class>
-                com.zeroturnaround.javarebel.idea.plugin.settings.JRebelProjectProperties
+                com.zeroturnaround.javarebel.idea.plugin.settings.state.JRebelProjectProperties
             </implementation-class>
         </component>
 
         <component>
             <implementation-class>
                 com.zeroturnaround.javarebel.idea.plugin.runner.BootstrapPreGenerator
+            </implementation-class>
+        </component>
+
+        <component>
+            <implementation-class>
+                com.zeroturnaround.javarebel.idea.plugin.feature.autocompile.AutoCompileProjectComponent
             </implementation-class>
         </component>
 
@@ -128,7 +135,7 @@
 
         <component>
             <implementation-class>
-                com.zeroturnaround.javarebel.idea.plugin.settings.JRebelSettingsState
+                com.zeroturnaround.javarebel.idea.plugin.settings.state.JRebelSettingsState
             </implementation-class>
         </component>
 
@@ -140,7 +147,13 @@
 
         <component>
             <implementation-class>
-                com.zeroturnaround.javarebel.idea.plugin.notifications.PersistentSettingsManager
+                com.zeroturnaround.javarebel.idea.plugin.runner.RunnerComponent
+            </implementation-class>
+        </component>
+
+        <component>
+            <implementation-class>
+                com.zeroturnaround.javarebel.idea.plugin.runner.DashboardComponent
             </implementation-class>
         </component>
 
@@ -155,13 +168,11 @@
         </component>
 
         <component>
-            <implementation-class>com.zeroturnaround.javarebel.idea.plugin.settings.IntellijProxyProvider
-            </implementation-class>
+            <implementation-class>com.zeroturnaround.javarebel.idea.plugin.settings.IntellijProxyProvider</implementation-class>
         </component>
 
         <component>
-            <implementation-class>com.zeroturnaround.javarebel.idea.plugin.facet.JRebelFacetCleanupComponent
-            </implementation-class>
+            <implementation-class>com.zeroturnaround.javarebel.idea.plugin.facet.JRebelFacetCleanupComponent</implementation-class>
         </component>
     </application-components>
 
