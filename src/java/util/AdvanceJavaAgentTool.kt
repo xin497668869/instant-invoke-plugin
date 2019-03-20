@@ -41,7 +41,7 @@ object AdvanceJavaAgentTool {
                 val availablePort = NetUtils.availablePort
                 SettingProperty.setProjectPort(project, availablePort)
                 return """ -javaagent:"${hotDeployFile.absolutePath}"="$availablePort" """
-//                return """ -javaagent:"G:\workspaces\idea\维护\instant-invoke\instant-invoke-agent\target\instant-invoke-agent-1.0-SNAPSHOT.jar"="$availablePort" """
+//                return """ -javaagent:"G:\workspaces\idea\维护\instant-invoke\instant-invoke-agent\target\instant-invoke-agent.jar"="$availablePort" """
             } else {
                 SettingProperty.setHotDeploy(project, false)
                 ApplicationManager.getApplication().invokeLater {

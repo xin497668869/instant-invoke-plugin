@@ -10,7 +10,7 @@ import gui.setting.SettingDialog
  */
 class SettingAction : AnAction() {
 
-    override fun actionPerformed(e: AnActionEvent?) {
+    override fun actionPerformed(e: AnActionEvent) {
         SettingDialog(e!!.project).apply {
             pack()
             isVisible = true

@@ -58,7 +58,7 @@ public class JRebelDebugRunner extends GenericDebuggerRunner {
     }
 
     public boolean canRun(@NotNull String executorId, @NotNull RunProfile runProfile) {
-        return this.getDebug().canRun(executorId, super.getRunnerId(), runProfile);
+        return executorId.equals("JRebel Debug") || executorId.equals("JRebel Executor");
     }
 
     public void checkConfiguration(RunnerSettings settings, ConfigurationPerRunnerSettings configurationPerRunnerSettings) {
@@ -81,6 +81,9 @@ public class JRebelDebugRunner extends GenericDebuggerRunner {
         if (xrebelParam != null) {
             var1.getVMParametersList().addParametersString(xrebelParam);
         }
+
+        var1.getVMParametersList()
+            .addParametersString("-Dmyproject.root=\"" + var3.getBasePath() + "\"");
     }
 
 

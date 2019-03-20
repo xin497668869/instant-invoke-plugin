@@ -23,11 +23,7 @@ object SettingProperty {
     private val lastRequest = "lastRequest"
     private val isProjectInit = "isProjectInit "
 
-    fun test(test:Int?){
-        println("asdfasdf")
-    }
     fun getLastRequest(project: Project): String {
-        test(null)
         return PropertiesComponent.getInstance(project).getValue(lastRequest, "")
     }
 

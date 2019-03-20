@@ -1,20 +1,13 @@
 <idea-plugin>
     <id>instant-invoke-plugin</id>
     <name>instant-invoke-plugin</name>
-    <version>1.2</version>
+    <version>1.3</version>
     <vendor email="497668869@qq.com" url=""></vendor>
 
 
-    <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <em>most HTML tags may be used</em>
-    ]]></description>
+    <description></description>
 
-    <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
-    ]]>
-    </change-notes>
+    <change-notes></change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
     <idea-version since-build="145.0"/>
@@ -45,9 +38,13 @@
 
         <projectService serviceInterface="com.zeroturnaround.javarebel.idea.plugin.settings.state.JRebelWorkspaceConfiguration"
                         serviceImplementation="com.zeroturnaround.javarebel.idea.plugin.settings.state.JRebelWorkspaceConfiguration"/>
-
-        <postStartupActivity implementation="component.InitStartupActivity"></postStartupActivity>
     </extensions>
+
+    <extensions defaultExtensionNs="org.jetbrains.plugins.gradle">
+        <projectResolve
+                implementation="com.zeroturnaround.javarebel.idea.plugin.runner.gradle.JRebelGradleProjectResolver"/>
+    </extensions>
+
 
     <actions>
         <action id="action.RunTestAction" class="action.RunTestAction"
@@ -109,7 +106,17 @@
                 com.zeroturnaround.javarebel.idea.plugin.feature.autocompile.AutoCompileProjectComponent
             </implementation-class>
         </component>
+        <component>
+            <implementation-class>
+                com.zeroturnaround.javarebel.idea.plugin.xml.external.ExternalAutoConvertProjectComponent
+            </implementation-class>
+        </component>
 
+        <component>
+            <implementation-class>
+                com.zeroturnaround.javarebel.idea.plugin.guide.actions.SetupGuideProjectComponent
+            </implementation-class>
+        </component>
     </project-components>
 
 
@@ -152,13 +159,18 @@
         </component>
 
         <component>
-            <implementation-class>
-                com.zeroturnaround.javarebel.idea.plugin.runner.DashboardComponent
+            <!--Need to register facets state sync code before any other activities working with project structure-->
+            <implementation-class>com.zeroturnaround.javarebel.idea.plugin.facet.JRebelFacetSyncComponent
             </implementation-class>
         </component>
 
         <component>
             <implementation-class>com.zeroturnaround.javarebel.idea.plugin.JRebelIdeaPlugin</implementation-class>
+        </component>
+
+        <component>
+            <implementation-class>com.zeroturnaround.javarebel.idea.plugin.extinstaller.ExtInstallerComponent
+            </implementation-class>
         </component>
 
         <component>
@@ -169,10 +181,6 @@
 
         <component>
             <implementation-class>com.zeroturnaround.javarebel.idea.plugin.settings.IntellijProxyProvider</implementation-class>
-        </component>
-
-        <component>
-            <implementation-class>com.zeroturnaround.javarebel.idea.plugin.facet.JRebelFacetCleanupComponent</implementation-class>
         </component>
     </application-components>
 
