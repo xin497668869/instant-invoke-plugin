@@ -27,10 +27,6 @@
         <programRunner implementation="com.zeroturnaround.javarebel.idea.plugin.runner.JRebelRunner"/>
         <programRunner implementation="com.zeroturnaround.javarebel.idea.plugin.runner.JRebelDebugRunner"/>
         <java.programPatcher implementation="com.zeroturnaround.javarebel.idea.plugin.runner.PreRunChecks"/>
-        <toolWindow factoryClass="com.zeroturnaround.javarebel.idea.plugin.toolwindow.JRebelWindowFactory"
-                    icon="/icons/zt_13x13.png" id="JRebel" anchor="left" secondary="true"/>
-        <toolWindow factoryClass="com.zeroturnaround.javarebel.idea.plugin.toolwindow.RebelRemoteLogWindowFactory"
-                    icon="/icons/zt_13x13.png" id="JRebel Console" anchor="bottom" secondary="true"/>
         <applicationConfigurable id="com.zeroturnaround.javarebel.idea.plugin.settings.JRebelSettingsComponent"
                                  provider="com.zeroturnaround.javarebel.idea.plugin.settings.JRebelSettingsComponent"
                                  displayName="JRebel" groupId="root" dynamic="true" />
@@ -38,11 +34,9 @@
 
         <projectService serviceInterface="com.zeroturnaround.javarebel.idea.plugin.settings.state.JRebelWorkspaceConfiguration"
                         serviceImplementation="com.zeroturnaround.javarebel.idea.plugin.settings.state.JRebelWorkspaceConfiguration"/>
-    </extensions>
 
-    <extensions defaultExtensionNs="org.jetbrains.plugins.gradle">
-        <projectResolve
-                implementation="com.zeroturnaround.javarebel.idea.plugin.runner.gradle.JRebelGradleProjectResolver"/>
+        <postStartupActivity implementation="component.InitStartupActivity"></postStartupActivity>
+        <!--        <toolWindow id="log.LogToolWindow" anchor="bottom" icon="/images/haha.png" factoryClass="log.LogToolWindow"/>-->
     </extensions>
 
 
@@ -112,11 +106,7 @@
             </implementation-class>
         </component>
 
-        <component>
-            <implementation-class>
-                com.zeroturnaround.javarebel.idea.plugin.guide.actions.SetupGuideProjectComponent
-            </implementation-class>
-        </component>
+        >
     </project-components>
 
 
@@ -125,12 +115,6 @@
             <!-- This has to be first -->
             <implementation-class>
                 com.zeroturnaround.javarebel.idea.plugin.logger.IdeaLog
-            </implementation-class>
-        </component>
-
-        <component>
-            <implementation-class>
-                com.zeroturnaround.javarebel.idea.plugin.remoting.console.RemoteLogger
             </implementation-class>
         </component>
 

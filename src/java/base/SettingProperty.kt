@@ -14,8 +14,8 @@ import java.io.File
 object SettingProperty {
 
 
-
     private val hotDeploy = "is_hotdeploy"
+    private val invokeAutoCompile = "is_invokeAutoCompile"
     private val xrebel = "is_xrebel"
     private val PROJECT_PORT = "project_port"
     val INSTANT_INVOKE_AGENT = "instant-invoke-agent"
@@ -40,11 +40,22 @@ object SettingProperty {
     }
 
     fun isHotDeploy(project: Project): Boolean {
+        if (!PropertiesComponent.getInstance(project).isValueSet(hotDeploy)) {
+            PropertiesComponent.getInstance(project).setValue(hotDeploy, true)
+        }
         return PropertiesComponent.getInstance(project).getBoolean(hotDeploy)
     }
 
     fun setHotDeploy(project: Project, value: Boolean) {
         PropertiesComponent.getInstance(project).setValue(hotDeploy, value)
+    }
+
+    fun isInvokeAutoCompile(): Boolean {
+        return PropertiesComponent.getInstance().getBoolean(invokeAutoCompile, false);
+    }
+
+    fun setInvokeAutoCompile(value: Boolean) {
+        PropertiesComponent.getInstance().setValue(invokeAutoCompile, "${value}");
     }
 
     fun isXrebel(project: Project): Boolean {
