@@ -24,16 +24,18 @@ import com.zeroturnaround.javarebel.idea.plugin.runner.api.JRebelDebugRunnerComm
 import com.zeroturnaround.javarebel.idea.plugin.runner.api.RunnerCommonInstances;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import util.AdvanceJavaAgentTool;
+import util.AdvanceJavaAgentUtils;
 
 public class JRebelDebugRunner extends GenericDebuggerRunner {
     public JRebelDebugRunner() {
     }
 
+    @Override
     public SettingsEditor<GenericDebuggerRunnerSettings> getSettingsEditor(Executor executor, RunConfiguration runConfiguration) {
         return this.getDebug().getSettingsEditor(executor, runConfiguration);
     }
 
+    @Override
     public RunContentDescriptor doExecute(@NotNull Project project, @NotNull RunProfileState state, @Nullable RunContentDescriptor runContentDescriptor, @NotNull ExecutionEnvironment env) throws ExecutionException {
         this.getDebug().preDoExecute(state, env);
         RunContentDescriptor rd = super.doExecute(project, state, runContentDescriptor, env);
@@ -41,6 +43,7 @@ public class JRebelDebugRunner extends GenericDebuggerRunner {
         return rd;
     }
 
+    @Override
     protected RunContentDescriptor doExecute(@NotNull RunProfileState state, @NotNull ExecutionEnvironment env) throws ExecutionException {
         this.getDebug().preDoExecute(state, env);
         RunContentDescriptor rd = super.doExecute(state, env);
@@ -53,18 +56,22 @@ public class JRebelDebugRunner extends GenericDebuggerRunner {
     }
 
     @NotNull
+    @Override
     public String getRunnerId() {
         return this.getDebug().getRunnerId(super.getRunnerId());
     }
 
+    @Override
     public boolean canRun(@NotNull String executorId, @NotNull RunProfile runProfile) {
         return executorId.equals("JRebel Debug") || executorId.equals("JRebel Executor");
     }
 
+    @Override
     public void checkConfiguration(RunnerSettings settings, ConfigurationPerRunnerSettings configurationPerRunnerSettings) {
         this.getDebug().checkConfiguration(settings, configurationPerRunnerSettings);
     }
 
+    @Override
     public void patch(JavaParameters javaParameters, RunnerSettings runnerSettings, RunProfile profile, boolean beforeExecution) throws ExecutionException {
         super.patch(javaParameters, runnerSettings, profile, beforeExecution);
 
@@ -73,27 +80,25 @@ public class JRebelDebugRunner extends GenericDebuggerRunner {
 
     public void patchInstantInvokePlugin(JavaParameters var1, Project var3) {
 
-        String hotDeployParam = AdvanceJavaAgentTool.INSTANCE.getInstantInvokeAgent(var3);
+        String hotDeployParam = AdvanceJavaAgentUtils.getInstantInvokeAgent(var3);
         if (hotDeployParam != null) {
             var1.getVMParametersList().addParametersString(hotDeployParam);
-        }
-        String xrebelParam = AdvanceJavaAgentTool.INSTANCE.getXrebelAgent(var3);
-        if (xrebelParam != null) {
-            var1.getVMParametersList().addParametersString(xrebelParam);
         }
 
         var1.getVMParametersList()
             .addParametersString("-Dmyproject.root=\"" + var3.getBasePath() + "\"");
     }
 
-
+    @Override
     public void execute(@NotNull ExecutionEnvironment env, @Nullable Callback callback) throws ExecutionException {
-        boolean execute = this.getDebug().execute(env, callback);
+        boolean execute = this.getDebug()
+                              .execute(env);
         if (execute) {
             super.execute(env, callback);
         }
     }
 
+    @Override
     protected RunContentDescriptor createContentDescriptor(@NotNull RunProfileState state, @NotNull ExecutionEnvironment environment) throws ExecutionException {
         RunContentDescriptor descriptor = this.getDebug().createContentDescriptor(state, environment);
         if (state instanceof JavaCommandLine) {

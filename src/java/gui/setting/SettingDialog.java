@@ -1,18 +1,22 @@
 package gui.setting;
 
+import base.AdvanceSetting;
 import base.SettingProperty;
 import com.intellij.openapi.project.Project;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author xin
@@ -21,9 +25,9 @@ public class SettingDialog extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton cancelButton;
-    private JCheckBox cbXrebel;
-    private JCheckBox cbHotdeploy;
-    private JCheckBox cbInvokeAutoCompile;
+    private Map<AdvanceSetting, JCheckBox> advanceCheckBoxs;
+    private JPanel advancePanel;
+    private JTextField textField1;
     private Project project;
 
     {
@@ -38,10 +42,13 @@ public class SettingDialog extends JDialog {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
-
-        cbHotdeploy.setSelected(SettingProperty.INSTANCE.isHotDeploy(project));
-        cbXrebel.setSelected(SettingProperty.INSTANCE.isXrebel(project));
-        cbInvokeAutoCompile.setSelected(SettingProperty.INSTANCE.isInvokeAutoCompile());
+        advanceCheckBoxs = new HashMap<>();
+        advancePanel.setLayout(new VerticalLayout());
+        for (AdvanceSetting advanceSetting : AdvanceSetting.values()) {
+            JCheckBox jcheckBox = new JCheckBox(advanceSetting.getDesc(), SettingProperty.isAdvanceSet(project, advanceSetting));
+            advancePanel.add(jcheckBox);
+            advanceCheckBoxs.put(advanceSetting, jcheckBox);
+        }
 
         buttonOK.addActionListener(new ActionListener() {
             @Override
@@ -83,9 +90,12 @@ public class SettingDialog extends JDialog {
     }
 
     private void onOK() {
-        SettingProperty.INSTANCE.setHotDeploy(project, cbHotdeploy.isSelected());
-        SettingProperty.INSTANCE.setXrebel(project, cbXrebel.isSelected());
-        SettingProperty.INSTANCE.setInvokeAutoCompile(cbInvokeAutoCompile.isSelected());
+        for (AdvanceSetting advanceSetting : AdvanceSetting.values()) {
+            SettingProperty.setAdvanceSet(project,
+                                          advanceSetting,
+                                          advanceCheckBoxs.get(advanceSetting)
+                                                          .isSelected());
+        }
         dispose();
     }
 
@@ -146,21 +156,6 @@ public class SettingDialog extends JDialog {
         panel4.add(label1,
                    new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED,
                                        GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        cbHotdeploy = new JCheckBox();
-        cbHotdeploy.setText("是否启动热部署");
-        panel3.add(cbHotdeploy, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
-                                                    GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-                                                    GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        cbXrebel = new JCheckBox();
-        cbXrebel.setText("是否启动xrebel");
-        panel3.add(cbXrebel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
-                                                 GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-                                                 GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 
-        cbInvokeAutoCompile = new JCheckBox();
-        cbInvokeAutoCompile.setText("调试是否自动build (全局配置)");
-        panel3.add(cbInvokeAutoCompile, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
-                                                            GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-                                                            GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 }

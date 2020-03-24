@@ -6,13 +6,11 @@
 package com.zeroturnaround.javarebel.idea.plugin;
 
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
-import com.intellij.openapi.compiler.CompilerTopics;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.project.Project;
 import component.InitStartupActivity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import util.AdvanceJavaAgentTool;
+import util.AdvanceJavaAgentUtils;
 
 import java.io.File;
 
@@ -31,7 +29,7 @@ public class EmbeddedJRebelPath {
             log.debug("Nothing in cache for cachedEmbeddedLegacyPath...");
 
             try {
-                String path = System.getProperty("jrebel.jar.location", AdvanceJavaAgentTool.INSTANCE.getJrebelAgent());
+                String path = System.getProperty("jrebel.jar.location", AdvanceJavaAgentUtils.getJrebelAgent());
                 validatePath(path);
                 cachedEmbeddedLegacyPath = path;
             } catch (Exception var1) {
@@ -50,7 +48,7 @@ public class EmbeddedJRebelPath {
             log.debug("Nothing in cache for cachedEmbeddedGriffinPath...");
 
             try {
-                String path = InitStartupActivity.Companion.getJrebelLocation();
+                String path = InitStartupActivity.getJrebelLocation();
                 cachedEmbeddedGriffinPath = path;
             } catch (Exception var1) {
                 log.error(var1);

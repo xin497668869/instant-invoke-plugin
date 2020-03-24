@@ -16,8 +16,8 @@
     <orderEntry type="library" name="Maven: org.jetbrains:annotations:13.0" level="project" />
     <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-stdlib-jre7:1.1.51" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.jetbrains.kotlin:kotlin-test:1.1.51" level="project" />
-    <orderEntry type="library" name="lib" level="project" />
-    <orderEntry type="library" name="com.squareup.okhttp3:okhttp:3.13.1" level="project" />
     <orderEntry type="library" name="org.projectlombok:lombok:1.18.8" level="project" />
+    <orderEntry type="library" name="com.alibaba:fastjson:1.2.62" level="project" />
+    <orderEntry type="library" name="lib" level="project" />
   </component>
 </module>
