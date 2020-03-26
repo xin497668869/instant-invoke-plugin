@@ -286,7 +286,7 @@ VII. GENERAL TERMS
 
 (i) The Licensee can choose the venue for disputes arising from this Agreement from among the following possibilities: a) courts of state of Delaware, US; b) courts of state of Massachusetts, US; c) courts of Germany; d) courts of England; e) courts of Estonia.
 (ii) If the Licensee is claimant in the dispute, Licensee will notify Licensor in written form or by e-mail about his choice of venue together with first notification of his claim or within 30 days after it. If the Licensee is defendant in the dispute, Licensee will notify Licensor in written form or by e-mail about his choice of venue within 30 days of Licensor's notification of the claim. If the Licensee does not use his right for venue selection, the default venue with exclusive jurisdiction for dispute resolution will be the courts of Estonia.
-(iii) After the venue has been selected by the Licensee, the courts of selected venue will have the exclusive jurisdiction over hearing and determining any suit, action or proceedings and/or to settle any disputes arising out of or in any way relating to this Agreement or its formation or validity and for the purpose of enforcement of any judgment against defendant's property or assets.
+(iii) After the venue has been selected by the Licensee, the courts of selected venue will have the exclusive jurisdiction over hearing and determining any suit, com.xin.action or proceedings and/or to settle any disputes arising out of or in any way relating to this Agreement or its formation or validity and for the purpose of enforcement of any judgment against defendant's property or assets.
 
 
 51. Use of Name and Logo

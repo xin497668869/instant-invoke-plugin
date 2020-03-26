@@ -532,7 +532,7 @@ corresponding vendors for additional details.
             the materials to be distributed need not include anything that is
             normally distributed (in either source or binary form) with the major
             components (compiler, kernel, and so on) of the operating system on
-            which the executable runs, unless that component itself accompanies
+            which the executable runs, unless that com.xin.component itself accompanies
             the executable.
 
               It may happen that this requirement contradicts the license
@@ -866,7 +866,7 @@ corresponding vendors for additional details.
 
         If any provision of this Agreement is invalid or unenforceable under applicable
         law, it shall not affect the validity or enforceability of the remainder of the
-        terms of this Agreement, and without further action by the parties hereto, such
+        terms of this Agreement, and without further com.xin.action by the parties hereto, such
         provision shall be reformed to the minimum extent necessary to make such
         provision valid and enforceable.
 
@@ -905,8 +905,8 @@ corresponding vendors for additional details.
 
         This Agreement is governed by the laws of the State of New York and the
         intellectual property laws of the United States of America. No party to this
-        Agreement will bring a legal action under this Agreement more than one year
-        after the cause of action arose. Each party waives its rights to a jury trial
+        Agreement will bring a legal com.xin.action under this Agreement more than one year
+        after the cause of com.xin.action arose. Each party waives its rights to a jury trial
         in any resulting litigation.
 
 
@@ -1134,7 +1134,7 @@ corresponding vendors for additional details.
 
                   8.1.  This License and the rights granted hereunder will terminate automatically if You fail to comply with terms herein and fail to cure such breach within 30 days of becoming aware of the breach. All sublicenses to the Covered Code which are properly granted shall survive any termination of this License. Provisions which, by their nature, must remain in effect beyond the termination of this License shall survive.
 
-                  8.2.  If You initiate litigation by asserting a patent infringement claim (excluding declatory judgment actions) against Initial Developer or a Contributor (the Initial Developer or Contributor against whom You file such action is referred to as "Participant")  alleging that:
+                  8.2.  If You initiate litigation by asserting a patent infringement claim (excluding declatory judgment actions) against Initial Developer or a Contributor (the Initial Developer or Contributor against whom You file such com.xin.action is referred to as "Participant")  alleging that:
 
                   (a)  such Participant's Contributor Version directly or indirectly infringes any patent, then any and all rights granted by such Participant to You under Sections 2.1 and/or 2.2 of this License shall, upon 60 days notice from Participant terminate prospectively, unless if within 60 days after receipt of notice You either: (i)  agree in writing to pay Participant a mutually agreeable reasonable royalty for Your past and future use of Modifications made by such Participant, or (ii) withdraw Your litigation claim with respect to the Contributor Version against such Participant.  If within 60 days of notice, a reasonable royalty and payment arrangement are not mutually agreed upon in writing by the parties or the litigation claim is not withdrawn, the rights granted by Participant to You under Sections 2.1 and/or 2.2 automatically terminate at the expiration of the 60 day notice period specified above.
 

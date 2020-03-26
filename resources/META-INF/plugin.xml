@@ -27,40 +27,106 @@
         <programRunner implementation="com.zeroturnaround.javarebel.idea.plugin.runner.JRebelRunner"/>
         <programRunner implementation="com.zeroturnaround.javarebel.idea.plugin.runner.JRebelDebugRunner"/>
         <java.programPatcher implementation="com.zeroturnaround.javarebel.idea.plugin.runner.PreRunChecks"/>
+        <!--        <toolWindow factoryClass="com.zeroturnaround.javarebel.idea.plugin.toolwindow.JRebelModulesWindowFactory"-->
+        <!--                    icon="/icons/zt_13x13.png" id="JRebel" anchor="left" secondary="true"/>-->
+        <!--        <toolWindow factoryClass="com.zeroturnaround.javarebel.idea.plugin.console.IntellijJRebelConsoleWindowFactory"-->
+        <!--                    icon="/icons/zt_13x13.png" id="JRebel Console" anchor="bottom" secondary="true"/>-->
         <applicationConfigurable id="com.zeroturnaround.javarebel.idea.plugin.settings.JRebelSettingsComponent"
                                  provider="com.zeroturnaround.javarebel.idea.plugin.settings.JRebelSettingsComponent"
-                                 displayName="JRebel" groupId="root" dynamic="true"/>
+                                 groupId="root" dynamic="true"/>
         <errorHandler implementation="com.zeroturnaround.javarebel.idea.plugin.logger.ZtErrorHandler"/>
 
         <projectService
-                serviceInterface="com.zeroturnaround.javarebel.idea.plugin.settings.state.JRebelWorkspaceConfiguration"
                 serviceImplementation="com.zeroturnaround.javarebel.idea.plugin.settings.state.JRebelWorkspaceConfiguration"/>
+        <externalProjectDataService
+                implementation="com.zeroturnaround.javarebel.idea.plugin.gradle.GradleOutputPathsDataService"/>
+        <projectService serviceInterface="com.zeroturnaround.javarebel.idea.plugin.runner.RebelAgentSelectionManager"
+                        serviceImplementation="com.zeroturnaround.javarebel.idea.plugin.runner.selection.RebelAgentSelectionManagerImpl"/>
 
-        <postStartupActivity implementation="component.InitStartupActivity"></postStartupActivity>
-        <toolWindow id="log.LogToolWindow" anchor="bottom" icon="/images/haha.png" factoryClass="log.LogToolWindow"/>
+        <applicationService
+                serviceImplementation="com.zeroturnaround.javarebel.idea.plugin.settings.state.RebelSettingsService"/>
     </extensions>
 
+    <extensions defaultExtensionNs="org.jetbrains.plugins.gradle">
+        <projectResolve
+                implementation="com.zeroturnaround.javarebel.idea.plugin.runner.gradle.JRebelGradleProjectResolver"/>
+    </extensions>
 
     <actions>
-        <action id="action.RunTestAction" class="action.RunTestAction"
+        <action id="com.xin.action.RunTestAction" class="com.xin.action.RunTestAction"
                 text="快速调用启动" description="快速调用启动">
             <keyboard-shortcut keymap="$default" first-keystroke="alt X"/>
         </action>
-        <action id="action.ReRunTestAction" class="action.ReRunTestAction"
+        <action id="com.xin.action.ReRunTestAction" class="com.xin.action.ReRunTestAction"
                 text="快速调用重启动" description="重新调用上一次方法">
             <keyboard-shortcut keymap="$default" first-keystroke="alt C"/>
         </action>
-        <action id="action.SettingAction" class="action.SettingAction"
+        <action id="com.xin.action.SettingAction" class="com.xin.action.SettingAction"
                 text="快速调用配置" description="快速调用配置">
         </action>
         <group popup="true" id="com.xin.instant-invoke" text="快速调用">
-            <reference ref="action.RunTestAction"/>
-            <reference ref="action.ReRunTestAction"/>
-            <reference ref="action.SettingAction"/>
+            <reference ref="com.xin.action.RunTestAction"/>
+            <reference ref="com.xin.action.ReRunTestAction"/>
+            <reference ref="com.xin.action.SettingAction"/>
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </group>
+
+
+        <group id="JRebelGroup" text="JRebel" description="JRebel group" icon="/icons/zt_16x16.png" popup="true">
+            <action id="com.zeroturnaround.javarebel.idea.plugin.actions.ToggleRebelFacetAction"
+                    class="com.zeroturnaround.javarebel.idea.plugin.actions.ToggleRebelFacetAction"
+                    description="Enable JRebel for module"
+                    text="Enable JRebel"
+                    icon="/icons/zt_16x16.png">
+            </action>
+
+            <separator/>
+
+            <action id="com.zeroturnaround.javarebel.idea.plugin.actions.JRebelFacetAction"
+                    class="com.zeroturnaround.javarebel.idea.plugin.actions.JRebelFacetAction"
+                    description="Open JRebel facet"
+                    text="Configure module"
+                    icon="/actions/properties.png">
+            </action>
+
+            <separator/>
+
+            <action id="com.zeroturnaround.javarebel.idea.plugin.actions.GenerateRemoteAction"
+                    class="com.zeroturnaround.javarebel.idea.plugin.actions.GenerateRemoteAction"
+                    description="Enable remote server support for module"
+                    text="Enable remote server support"
+                    icon="/icons/cloud_16x16.png">
+            </action>
+
+            <action id="com.zeroturnaround.javarebel.idea.plugin.SyncAction"
+                    class="com.zeroturnaround.javarebel.idea.plugin.actions.SyncAction"
+                    description="Synchronize with server"
+                    text="Synchronize"
+                    icon="/icons/cloud_16x16.png">
+            </action>
+
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+        </group>
+
+        <!--        <group id="rebel.toolbar.runner.group" class="com.zeroturnaround.javarebel.idea.plugin.runner.RebelToolbarActionGroup">-->
+        <!--            <add-to-group group-id="ToolbarRunGroup" anchor="after" relative-to-action="RunnerActions"/>-->
+        <!--        </group>-->
+
+        <!--        <group id="rebel.menu.run.group" class="com.zeroturnaround.javarebel.idea.plugin.runner.RebelRunMenuActionGroup">-->
+        <!--            <add-to-group group-id="RunMenu" anchor="after" relative-to-action="RunnerActions"/>-->
+        <!--        </group>-->
+
+        <action id="ToolWindowOpenFacet"
+                class="com.zeroturnaround.javarebel.idea.plugin.toolwindow.actions.JRebelModulesTableOpenFacetAction"
+                text="JRebel facet" description="Open and/or create JRebel facet">
+        </action>
+
+        <action id="ToolWindowOpenSettings" class="com.zeroturnaround.javarebel.idea.plugin.actions.OpenSettingsAction"
+                text="JRebel Settings" description="Open JRebel settings">
+        </action>
     </actions>
 
+    <!-- components are deprecated, use services or event listeners if possible -->
     <module-components>
         <component>
             <implementation-class>
@@ -76,17 +142,12 @@
 
     </module-components>
 
+    <!-- components are deprecated, use services or event listeners if possible -->
     <project-components>
 
         <component>
             <implementation-class>
                 com.zeroturnaround.javarebel.idea.plugin.notifications.IdeaNotificationServer
-            </implementation-class>
-        </component>
-
-        <component>
-            <implementation-class>
-                com.zeroturnaround.javarebel.idea.plugin.settings.state.JRebelProjectProperties
             </implementation-class>
         </component>
 
@@ -106,11 +167,10 @@
                 com.zeroturnaround.javarebel.idea.plugin.xml.external.ExternalAutoConvertProjectComponent
             </implementation-class>
         </component>
-
-        >
     </project-components>
 
 
+    <!-- components are deprecated, use services or event listeners if possible -->
     <application-components>
         <component>
             <!-- This has to be first -->
@@ -121,13 +181,13 @@
 
         <component>
             <implementation-class>
-                com.zeroturnaround.javarebel.idea.plugin.debugger.JRebelIdeaDebuggerPlugin
+                com.zeroturnaround.javarebel.idea.plugin.console.IntellijJRebelConsoleLogger
             </implementation-class>
         </component>
 
         <component>
             <implementation-class>
-                com.zeroturnaround.javarebel.idea.plugin.settings.state.JRebelSettingsState
+                com.zeroturnaround.javarebel.idea.plugin.debugger.JRebelIdeaDebuggerPlugin
             </implementation-class>
         </component>
 
@@ -140,6 +200,12 @@
         <component>
             <implementation-class>
                 com.zeroturnaround.javarebel.idea.plugin.runner.RunnerComponent
+            </implementation-class>
+        </component>
+
+        <component>
+            <implementation-class>
+                com.zeroturnaround.javarebel.idea.plugin.runner.DashboardComponent
             </implementation-class>
         </component>
 
