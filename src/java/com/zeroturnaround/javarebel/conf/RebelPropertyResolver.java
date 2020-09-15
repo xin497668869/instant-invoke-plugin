@@ -28,21 +28,8 @@ public class RebelPropertyResolver {
     private final Properties properties = new Properties();
 
     public RebelPropertyResolver() {
+
         this.load();
-    }
-
-    private File getPropertiesFile() {
-        String propertiesFilePath = this.getSystemProperty("rebel.properties");
-        if (propertiesFilePath != null) {
-            File propertiesFile = new File(propertiesFilePath);
-            if (propertiesFile.exists()) {
-                log.info("The {} file does not exist at the specified path: {} ", "jrebel.properties", propertiesFilePath);
-            }
-
-            return propertiesFile;
-        } else {
-            return new File(RebelFileLayout.getPreferredMetaDataDir(), "jrebel.properties");
-        }
     }
 
     public String getSystemProperty(String key) {
@@ -78,6 +65,12 @@ public class RebelPropertyResolver {
     }
 
     public synchronized void load() {
+        try {
+            store("初始化");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         File file = this.getPropertiesFile();
         if (!file.exists()) {
             log.info("No jrebel.properties found from file system.");
@@ -134,6 +127,20 @@ public class RebelPropertyResolver {
         Properties props = this.getFileProperties();
         props.putAll(this.getSystemProperties());
         return props;
+    }
+
+    private File getPropertiesFile() {
+        String propertiesFilePath = this.getSystemProperty("rebel.properties");
+        if (propertiesFilePath != null) {
+            File propertiesFile = new File(propertiesFilePath);
+            if (propertiesFile.exists()) {
+                log.info("The {} file does not exist at the specified path: {} ", "jrebel.properties", propertiesFilePath);
+            }
+
+            return propertiesFile;
+        } else {
+            return new File(RebelFileLayout.getPreferredMetaDataDir(), "jrebel.properties");
+        }
     }
 
     private void log(String message, Map<Object, Object> props) {

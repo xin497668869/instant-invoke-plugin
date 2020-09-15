@@ -37,7 +37,7 @@ public class RunTestAction extends AnAction {
                               .getParametersCount() > 0) {
                 throw new BaseException("测试方法不能有参数");
             }
-            ;
+
             String packageName = ((PsiJavaFile) positionMethod.getContainingFile()).getPackageName();
             List<String> paramNames = Arrays.stream(positionMethod.getParameterList()
                                                                   .getParameters())

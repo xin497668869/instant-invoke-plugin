@@ -19,5 +19,6 @@
     <orderEntry type="library" name="org.projectlombok:lombok:1.18.8" level="project" />
     <orderEntry type="library" name="com.alibaba:fastjson:1.2.62" level="project" />
     <orderEntry type="library" name="lib" level="project" />
+    <orderEntry type="library" name="jrebel" level="project" />
   </component>
 </module>

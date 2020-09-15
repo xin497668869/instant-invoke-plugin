@@ -13,9 +13,13 @@
     <idea-version since-build="145.0"/>
 
 
-    <!--<depends optional="true">com.intellij.javaee</depends>-->
-    <!--<depends optional="true">WebSphere</depends>-->
-    <!--<depends optional="true">Weblogic</depends>-->
+    <depends optional="true">com.intellij.javaee</depends>
+    <depends optional="true">WebSphere</depends>
+    <depends optional="true">Weblogic</depends>
+    <depends optional="true">org.jetbrains.idea.maven</depends>
+    <depends>org.jetbrains.kotlin</depends>
+    <depends optional="true">org.jetbrains.plugins.gradle</depends>
+    <depends optional="true" config-file="optional/com.intellij.javaee.view.xml">com.intellij.javaee.view</depends>
     <!-- added by request from JetBrains devs. Fixes some problem with imports on their side -->
     <depends>com.intellij.modules.java</depends>
 
@@ -25,28 +29,31 @@
         <executor implementation="com.zeroturnaround.javarebel.idea.plugin.runner.JRebelExecutor"/>
         <executor implementation="com.zeroturnaround.javarebel.idea.plugin.runner.JRebelDebugExecutor"/>
         <programRunner implementation="com.zeroturnaround.javarebel.idea.plugin.runner.JRebelRunner"/>
-        <programRunner implementation="com.zeroturnaround.javarebel.idea.plugin.runner.JRebelDebugRunner"/>
+        <programRunner implementation="com.zeroturnaround.javarebel.conf.JRebelDebugRunner"/>
         <java.programPatcher implementation="com.zeroturnaround.javarebel.idea.plugin.runner.PreRunChecks"/>
-        <!--        <toolWindow factoryClass="com.zeroturnaround.javarebel.idea.plugin.toolwindow.JRebelModulesWindowFactory"-->
-        <!--                    icon="/icons/zt_13x13.png" id="JRebel" anchor="left" secondary="true"/>-->
-        <!--        <toolWindow factoryClass="com.zeroturnaround.javarebel.idea.plugin.console.IntellijJRebelConsoleWindowFactory"-->
-        <!--                    icon="/icons/zt_13x13.png" id="JRebel Console" anchor="bottom" secondary="true"/>-->
+        <java.programPatcher implementation="com.zeroturnaround.javarebel.idea.plugin.runner.JRebelRunnerCommon$ArgumentPatcher"/>
+        <toolWindow factoryClass="com.zeroturnaround.javarebel.idea.plugin.toolwindow.JRebelModulesWindowFactory"
+                    icon="/icons/zt_13x13.png" id="JRebel" anchor="left" secondary="true"/>
+        <toolWindow factoryClass="com.zeroturnaround.javarebel.idea.plugin.console.IntellijJRebelConsoleWindowFactory"
+                    icon="/icons/zt_13x13.png" id="JRebel Console" anchor="bottom" secondary="true"/>
         <applicationConfigurable id="com.zeroturnaround.javarebel.idea.plugin.settings.JRebelSettingsComponent"
                                  provider="com.zeroturnaround.javarebel.idea.plugin.settings.JRebelSettingsComponent"
                                  groupId="root" dynamic="true"/>
         <errorHandler implementation="com.zeroturnaround.javarebel.idea.plugin.logger.ZtErrorHandler"/>
 
-        <projectService
-                serviceImplementation="com.zeroturnaround.javarebel.idea.plugin.settings.state.JRebelWorkspaceConfiguration"/>
-        <externalProjectDataService
-                implementation="com.zeroturnaround.javarebel.idea.plugin.gradle.GradleOutputPathsDataService"/>
+        <projectService serviceImplementation="com.zeroturnaround.javarebel.idea.plugin.settings.state.JRebelWorkspaceConfiguration"/>
+        <externalProjectDataService implementation="com.zeroturnaround.javarebel.idea.plugin.gradle.GradleOutputPathsDataService"/>
         <projectService serviceInterface="com.zeroturnaround.javarebel.idea.plugin.runner.RebelAgentSelectionManager"
                         serviceImplementation="com.zeroturnaround.javarebel.idea.plugin.runner.selection.RebelAgentSelectionManagerImpl"/>
 
-        <applicationService
-                serviceImplementation="com.zeroturnaround.javarebel.idea.plugin.settings.state.RebelSettingsService"/>
-    </extensions>
+        <projectService serviceImplementation="com.zeroturnaround.javarebel.idea.plugin.runner.args.ProjectsPathProvider"/>
 
+        <projectService serviceImplementation="com.zeroturnaround.javarebel.idea.plugin.xml.RebelXmlChangeManager"/>
+
+        <applicationService serviceImplementation="com.zeroturnaround.javarebel.idea.plugin.settings.state.RebelSettingsService"/>
+
+        <applicationService serviceImplementation="com.zeroturnaround.javarebel.idea.plugin.settings.IntellijProxyProvider"/>
+    </extensions>
     <extensions defaultExtensionNs="org.jetbrains.plugins.gradle">
         <projectResolve
                 implementation="com.zeroturnaround.javarebel.idea.plugin.runner.gradle.JRebelGradleProjectResolver"/>
@@ -70,7 +77,6 @@
             <reference ref="com.xin.action.SettingAction"/>
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </group>
-
 
         <group id="JRebelGroup" text="JRebel" description="JRebel group" icon="/icons/zt_16x16.png" popup="true">
             <action id="com.zeroturnaround.javarebel.idea.plugin.actions.ToggleRebelFacetAction"
@@ -108,31 +114,50 @@
             <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
         </group>
 
-        <!--        <group id="rebel.toolbar.runner.group" class="com.zeroturnaround.javarebel.idea.plugin.runner.RebelToolbarActionGroup">-->
-        <!--            <add-to-group group-id="ToolbarRunGroup" anchor="after" relative-to-action="RunnerActions"/>-->
-        <!--        </group>-->
+        <group id="rebel.toolbar.runner.group" class="com.zeroturnaround.javarebel.idea.plugin.runner.RebelToolbarActionGroup">
+            <add-to-group group-id="ToolbarRunGroup" anchor="after" relative-to-action="RunnerActions"/>
+        </group>
 
-        <!--        <group id="rebel.menu.run.group" class="com.zeroturnaround.javarebel.idea.plugin.runner.RebelRunMenuActionGroup">-->
-        <!--            <add-to-group group-id="RunMenu" anchor="after" relative-to-action="RunnerActions"/>-->
-        <!--        </group>-->
+        <group id="rebel.menu.run.group" class="com.zeroturnaround.javarebel.idea.plugin.runner.RebelRunMenuActionGroup">
+            <add-to-group group-id="RunMenu" anchor="after" relative-to-action="RunnerActions"/>
+        </group>
 
         <action id="ToolWindowOpenFacet"
                 class="com.zeroturnaround.javarebel.idea.plugin.toolwindow.actions.JRebelModulesTableOpenFacetAction"
-                text="JRebel facet" description="Open and/or create JRebel facet">
+                text="JRebel facet" description="Open and/or create JRebel facet" icon="/actions/properties.png">
         </action>
 
         <action id="ToolWindowOpenSettings" class="com.zeroturnaround.javarebel.idea.plugin.actions.OpenSettingsAction"
-                text="JRebel Settings" description="Open JRebel settings">
+                text="JRebel Settings" description="Open JRebel settings" icon="/general/ideOptions.png">
         </action>
+
+        <group id="JRebelHelpMenuGroup" class="com.intellij.openapi.actionSystem.DefaultActionGroup" text="JRebel" description="JRebel group" icon="/icons/zt_16x16.png" popup="true">
+            <add-to-group group-id="HelpMenu" anchor="before" relative-to-action="About"/>
+        </group>
+        <action id="jrebel.config" class="com.zeroturnaround.javarebel.idea.plugin.actions.OpenSettingsAction"
+                text="Configuration" description="Open JRebel configuration">
+            <add-to-group group-id="JRebelHelpMenuGroup" anchor="last"/>
+        </action>
+        <action id="jrebel.activate" class="com.zeroturnaround.javarebel.idea.plugin.actions.ActivateAction"
+                text="Activation" description="Activate JRebel">
+            <add-to-group group-id="JRebelHelpMenuGroup" anchor="last"/>
+        </action>
+        <action id="jrebel.support" class="com.zeroturnaround.javarebel.idea.plugin.actions.SupportAction"
+                text="Submit a Support Ticket" description="Send message to JRebel support">
+            <add-to-group group-id="JRebelHelpMenuGroup" anchor="last"/>
+        </action>
+        <action class="com.zeroturnaround.javarebel.idea.plugin.guide.actions.OpenInstallGuideToolWindowAction" description="Open setup guide" id="openInstallGuideToolWindowAction" text="Setup guide">
+            <add-to-group group-id="JRebelHelpMenuGroup" anchor="last"/>
+        </action>
+
     </actions>
+
+    <extensions defaultExtensionNs="org.jetbrains.plugins.gradle">
+        <projectResolve implementation="com.zeroturnaround.javarebel.idea.plugin.runner.gradle.JRebelGradleProjectResolver"/>
+    </extensions>
 
     <!-- components are deprecated, use services or event listeners if possible -->
     <module-components>
-        <component>
-            <implementation-class>
-                com.zeroturnaround.javarebel.idea.plugin.remoting.engine.RemotingComponent
-            </implementation-class>
-        </component>
 
         <component>
             <implementation-class>
@@ -172,12 +197,12 @@
 
     <!-- components are deprecated, use services or event listeners if possible -->
     <application-components>
-        <component>
-            <!-- This has to be first -->
-            <implementation-class>
-                com.zeroturnaround.javarebel.idea.plugin.logger.IdeaLog
-            </implementation-class>
-        </component>
+        <!--        <component>-->
+        <!--             This has to be first -->
+        <!--            <implementation-class>-->
+        <!--                com.zeroturnaround.javarebel.idea.plugin.logger.IdeaLog-->
+        <!--            </implementation-class>-->
+        <!--        </component>-->
 
         <component>
             <implementation-class>
@@ -199,20 +224,13 @@
 
         <component>
             <implementation-class>
-                com.zeroturnaround.javarebel.idea.plugin.runner.RunnerComponent
-            </implementation-class>
-        </component>
-
-        <component>
-            <implementation-class>
                 com.zeroturnaround.javarebel.idea.plugin.runner.DashboardComponent
             </implementation-class>
         </component>
 
         <component>
             <!--Need to register facets state sync code before any other activities working with project structure-->
-            <implementation-class>com.zeroturnaround.javarebel.idea.plugin.facet.JRebelFacetSyncComponent
-            </implementation-class>
+            <implementation-class>com.zeroturnaround.javarebel.idea.plugin.facet.JRebelFacetSyncComponent</implementation-class>
         </component>
 
         <component>
@@ -220,18 +238,12 @@
         </component>
 
         <component>
-            <implementation-class>com.zeroturnaround.javarebel.idea.plugin.extinstaller.ExtInstallerComponent
-            </implementation-class>
+            <implementation-class>com.zeroturnaround.javarebel.idea.plugin.extinstaller.ExtInstallerComponent</implementation-class>
         </component>
 
         <component>
             <implementation-class>
                 com.zeroturnaround.javarebel.idea.plugin.notifications.nps.NPSIdeaComponent
-            </implementation-class>
-        </component>
-
-        <component>
-            <implementation-class>com.zeroturnaround.javarebel.idea.plugin.settings.IntellijProxyProvider
             </implementation-class>
         </component>
     </application-components>

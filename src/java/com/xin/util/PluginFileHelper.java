@@ -12,6 +12,7 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.impl.file.PsiDirectoryFactory;
 import com.intellij.psi.search.GlobalSearchScope;
 import lombok.Getter;
+import org.jetbrains.kotlin.psi.KtFile;
 
 import java.io.IOException;
 
@@ -74,11 +75,16 @@ public class PluginFileHelper {
         PsiFile psiFile = PsiDocumentManager.getInstance(context.getProject())
                                             .getPsiFile(context.getEditor()
                                                                .getDocument());
-        if (!(psiFile instanceof PsiJavaFile)) {
+
+        PsiClass[] classes;
+        if (psiFile instanceof PsiJavaFile) {
+            classes = ((PsiJavaFile) psiFile).getClasses();
+        } else if (psiFile instanceof KtFile) {
+            classes = ((KtFile) psiFile).getClasses();
+        } else {
             throw new BaseException("必须是java文件才有方法\r\n" + psiFile + " " + psiFile.getFileType());
         }
-        PsiJavaFile psiJavaFileImpl = (PsiJavaFile) psiFile;
-        for (PsiClass psiClass : psiJavaFileImpl.getClasses()) {
+        for (PsiClass psiClass : classes) {
             for (PsiMethod method : psiClass.getMethods()) {
                 if (method.getTextRange()
                           .containsOffset(context.getEditor()
